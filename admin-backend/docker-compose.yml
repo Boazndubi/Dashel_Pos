@@ -1,0 +1,16 @@
+version: "3.9"
+
+# Postgres is hosted on Neon (online) - no local db service needed.
+
+services:
+  api:
+    build: .
+    container_name: admin_backend_api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules

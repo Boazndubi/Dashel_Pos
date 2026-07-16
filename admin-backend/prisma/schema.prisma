@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  CASHIER
+  AUDITOR
+}
+
+model User {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String     @unique
+  description String?
+  imageUrl    String?
+  parentId    String?
+  parent      Category?  @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryToCategory")
+  sortOrder   Int        @default(0)
+  isVisible   Boolean    @default(true)
+  products    Product[]
+  createdAt   DateTime   @default(now())
+}
+
+enum ProductStatus {
+  active
+  inactive
+}
+
+model Product {
+  id                String        @id @default(uuid())
+  name              String
+  description       String?
+  basePrice         Decimal       @db.Decimal(10, 2)
+  costPrice         Decimal?      @db.Decimal(10, 2)
+  quantity          Int           @default(0)
+  lowStockThreshold Int           @default(5)
+  sku               String?       @unique
+  featuredImageUrl  String?
+  status            ProductStatus @default(active)
+  categoryId        String?
+  category          Category?     @relation(fields: [categoryId], references: [id])
+  orderItems        OrderItem[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  createdAt DateTime @default(now())
+}
+
+enum PaymentMethod {
+  cash
+  mpesa
+  card
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
+enum OrderChannel {
+  pos
+  online
+}
+
+model Order {
+  id                    String        @id @default(uuid())
+  orderNumber           String        @unique
+  userId                String?
+  user                  User?         @relation(fields: [userId], references: [id])
+  customerName          String?
+  customerPhone         String?
+  items                 OrderItem[]
+  subtotal              Decimal       @db.Decimal(10, 2)
+  discount              Decimal       @default(0) @db.Decimal(10, 2)
+  tax                   Decimal       @default(0) @db.Decimal(10, 2)
+  grandTotal            Decimal       @db.Decimal(10, 2)
+  paymentMethod         PaymentMethod @default(cash)
+  paymentStatus         PaymentStatus @default(pending)
+  channel               OrderChannel  @default(pos)
+  mpesaCheckoutId       String?
+  pesapalTrackingId     String?
+  createdAt             DateTime      @default(now())
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+  total     Decimal @db.Decimal(10, 2)
+}
