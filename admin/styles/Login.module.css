@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+.loginShell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  background: #18140f;
+  font-family: 'Inter', sans-serif;
+}
+@media (max-width: 900px) {
+  .loginShell { grid-template-columns: 1fr; }
+  .loginVisual { display: none; }
+}
+
+/* ── Left: signature illustration panel ── */
+.loginVisual {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 22% 20%, rgba(196,138,78,0.13), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(74,122,91,0.09), transparent 50%),
+    #17130e;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3.5rem 3.5rem 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+.brandMark {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.75rem;
+  color: #f0eae0;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.2rem;
+}
+.brandMark span { color: #c48a4e; }
+.brandSub {
+  color: #8f8676;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.heroWrap {
+  width: 100%;
+  max-width: 360px;
+  align-self: center;
+  margin: 0.5rem 0 1rem -0.5rem;
+}
+
+.checkPath {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawCheck 0.6s 0.9s cubic-bezier(.65,0,.35,1) forwards;
+}
+.approvedText {
+  opacity: 0;
+  animation: fadeIn 0.4s 1.4s ease forwards;
+}
+.receiptGroup {
+  transform: translateY(46px);
+  opacity: 0;
+  animation: riseIn 0.65s 0.25s cubic-bezier(.2,.9,.3,1) forwards;
+}
+.arcInner { animation: pulse 2.6s 1.8s ease-in-out infinite; }
+.arcMid { opacity: 0.5; }
+.arcOuter { opacity: 0.28; }
+
+@keyframes drawCheck { to { stroke-dashoffset: 0; } }
+@keyframes fadeIn { to { opacity: 1; } }
+@keyframes riseIn { to { transform: translateY(0); opacity: 1; } }
+@keyframes pulse {
+  0%, 100% { opacity: 0.85; }
+  50% { opacity: 0.35; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkPath { animation: none; stroke-dashoffset: 0; }
+  .approvedText { animation: none; opacity: 1; }
+  .receiptGroup { animation: none; transform: translateY(0); opacity: 1; }
+  .arcInner { animation: none; opacity: 0.85; }
+}
+
+.visualCaption {
+  margin-top: 1.5rem;
+  color: #71685a;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-width: 340px;
+}
+.visualCaption strong { color: #d8cfc0; font-weight: 500; }
+
+/* ── Right: form panel ── */
+.loginFormPanel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.loginFormCard { width: 100%; max-width: 380px; }
+.formHeading {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: #f0eae0;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.3rem;
+}
+.formSub {
+  color: #8f8676;
+  font-size: 0.88rem;
+  margin-bottom: 2rem;
+}
+.fieldLabel {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #a89e8c;
+  margin-bottom: 0.4rem;
+}
+.fieldInput {
+  width: 100%;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(196,138,78,0.16);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  color: #f0ece3;
+  font-size: 0.92rem;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.fieldInput::placeholder { color: #5c5546; }
+.fieldInput:focus {
+  outline: none;
+  border-color: #c48a4e;
+  background: rgba(196,138,78,0.06);
+  box-shadow: 0 0 0 3px rgba(196,138,78,0.14);
+}
+.fieldInput:disabled { opacity: 0.5; }
+
+.forgotLink { color: #c48a4e; }
+
+.eyeToggle {
+  color: #8f8676;
+  display: flex;
+  min-width: 24px;
+  min-height: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorBox {
+  background: rgba(179,68,58,0.12);
+  border: 1px solid rgba(179,68,58,0.35);
+  color: #e39a8f;
+}
+
+.spinner {
+  height: 14px;
+  width: 14px;
+  border: 2px solid rgba(36,29,20,0.35);
+  border-top-color: #241d14;
+  border-radius: 50%;
+}
+
+.submitBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #c48a4e, #a9713c);
+  color: #241d14;
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: filter 150ms ease, transform 150ms ease;
+}
+.submitBtn:hover:not(:disabled) { filter: brightness(1.08); }
+.submitBtn:active:not(:disabled) { transform: scale(0.98); }
+.submitBtn:disabled { opacity: 0.55; cursor: not-allowed; }
+.submitBtn:focus-visible {
+  outline: 2px solid #c48a4e;
+  outline-offset: 2px;
+}

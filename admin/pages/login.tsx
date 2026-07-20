@@ -2,22 +2,8 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import {
-  Eye,
-  EyeOff,
-  ShoppingCart,
-  Package,
-  Receipt,
-  BarChart3,
-  Check,
-} from "lucide-react"
-
-const RECEIPT_LINES = [
-  { icon: ShoppingCart, label: "SALES TERMINAL" },
-  { icon: Package, label: "INVENTORY SYNC" },
-  { icon: Receipt, label: "ORDER QUEUE" },
-  { icon: BarChart3, label: "ANALYTICS FEED" },
-]
+import { Eye, EyeOff } from "lucide-react"
+import styles from "@/styles/Login.module.css"
 
 export default function Login() {
   const router = useRouter()
@@ -58,290 +44,127 @@ export default function Login() {
   }
 
   return (
-    <div className="login-shell">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
-        .login-shell {
-          min-height: 100vh;
-          display: grid;
-          grid-template-columns: 1.15fr 1fr;
-          background: #090c14;
-          font-family: 'Inter', sans-serif;
-        }
-        @media (max-width: 900px) {
-          .login-shell { grid-template-columns: 1fr; }
-          .login-visual { display: none; }
-        }
-
-        /* ── Left: signature receipt panel ── */
-        .login-visual {
-          position: relative;
-          overflow: hidden;
-          background:
-            radial-gradient(circle at 20% 15%, rgba(79,140,255,0.14), transparent 45%),
-            radial-gradient(circle at 80% 85%, rgba(52,211,153,0.12), transparent 50%),
-            #0a0e1a;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding: 4rem 3.5rem;
-          border-right: 1px solid rgba(255,255,255,0.06);
-        }
-        .brand-mark {
-          font-family: 'Space Grotesk', sans-serif;
-          font-weight: 700;
-          font-size: 1.75rem;
-          color: #f5f6f8;
-          letter-spacing: -0.02em;
-          margin-bottom: 0.4rem;
-        }
-        .brand-mark span { color: #34d399; }
-        .brand-sub {
-          color: #7d879c;
-          font-size: 0.9rem;
-          margin-bottom: 3rem;
-        }
-
-        .receipt {
-          background: #f3eee3;
-          color: #1a1a1a;
-          width: 320px;
-          padding: 1.75rem 1.5rem 2rem;
-          border-radius: 2px;
-          box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
-          font-family: 'IBM Plex Mono', monospace;
-          position: relative;
-        }
-        .receipt::before,
-        .receipt::after {
-          content: "";
-          position: absolute;
-          left: 0; right: 0;
-          height: 10px;
-          background:
-            linear-gradient(135deg, #f3eee3 50%, transparent 50%) 0 0/10px 10px repeat-x,
-            linear-gradient(-135deg, #f3eee3 50%, transparent 50%) 0 0/10px 10px repeat-x;
-          background-color: #090c14;
-        }
-        .receipt::before { top: -10px; }
-        .receipt::after { bottom: -10px; transform: rotate(180deg); }
-
-        .receipt-head {
-          text-align: center;
-          border-bottom: 1px dashed #b8b0a0;
-          padding-bottom: 0.85rem;
-          margin-bottom: 0.85rem;
-        }
-        .receipt-head .txn {
-          font-size: 0.68rem;
-          color: #7a7264;
-          letter-spacing: 0.06em;
-        }
-        .receipt-head .title {
-          font-size: 0.95rem;
-          font-weight: 500;
-          letter-spacing: 0.08em;
-          margin-top: 0.3rem;
-        }
-
-        .receipt-row {
-          display: flex;
-          align-items: center;
-          gap: 0.6rem;
-          padding: 0.55rem 0;
-          font-size: 0.78rem;
-          letter-spacing: 0.03em;
-          opacity: 0;
-          animation: printLine 0.5s ease forwards;
-        }
-        .receipt-row .icon-box {
-          width: 20px; height: 20px;
-          display: flex; align-items: center; justify-content: center;
-          color: #4a4438;
-          flex-shrink: 0;
-        }
-        .receipt-row .status {
-          margin-left: auto;
-          width: 16px; height: 16px;
-          border-radius: 50%;
-          background: #d7f7e6;
-          color: #16a34a;
-          display: flex; align-items: center; justify-content: center;
-          opacity: 0;
-          animation: checkIn 0.3s ease forwards;
-        }
-        .receipt-row:nth-child(1) { animation-delay: 0.3s; }
-        .receipt-row:nth-child(2) { animation-delay: 0.7s; }
-        .receipt-row:nth-child(3) { animation-delay: 1.1s; }
-        .receipt-row:nth-child(4) { animation-delay: 1.5s; }
-        .receipt-row:nth-child(1) .status { animation-delay: 0.75s; }
-        .receipt-row:nth-child(2) .status { animation-delay: 1.15s; }
-        .receipt-row:nth-child(3) .status { animation-delay: 1.55s; }
-        .receipt-row:nth-child(4) .status { animation-delay: 1.95s; }
-
-        .receipt-foot {
-          border-top: 1px dashed #b8b0a0;
-          margin-top: 0.6rem;
-          padding-top: 0.75rem;
-          font-size: 0.7rem;
-          color: #7a7264;
-          display: flex;
-          justify-content: space-between;
-        }
-
-        @keyframes printLine {
-          from { opacity: 0; transform: translateY(-4px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes checkIn {
-          from { opacity: 0; transform: scale(0.4); }
-          to { opacity: 1; transform: scale(1); }
-        }
-
-        .visual-caption {
-          margin-top: 3rem;
-          color: #5c6579;
-          font-size: 0.85rem;
-          line-height: 1.6;
-          max-width: 320px;
-        }
-        .visual-caption strong { color: #cdd3e0; font-weight: 500; }
-
-        @media (prefers-reduced-motion: reduce) {
-          .receipt-row, .receipt-row .status { animation: none; opacity: 1; }
-        }
-
-        /* ── Right: form panel ── */
-        .login-form-panel {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 2rem;
-        }
-        .login-form-card { width: 100%; max-width: 380px; }
-        .form-heading {
-          font-family: 'Space Grotesk', sans-serif;
-          font-weight: 700;
-          font-size: 1.6rem;
-          color: #f5f6f8;
-          letter-spacing: -0.02em;
-          margin-bottom: 0.3rem;
-        }
-        .form-sub {
-          color: #7d879c;
-          font-size: 0.88rem;
-          margin-bottom: 2rem;
-        }
-        .field-label {
-          display: block;
-          font-size: 0.78rem;
-          font-weight: 500;
-          color: #9aa2b4;
-          margin-bottom: 0.4rem;
-        }
-        .field-input {
-          width: 100%;
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.09);
-          border-radius: 10px;
-          padding: 0.7rem 0.9rem;
-          color: #f0f1f4;
-          font-size: 0.92rem;
-          transition: border-color 150ms ease, background 150ms ease;
-        }
-        .field-input::placeholder { color: #545c6e; }
-        .field-input:focus {
-          outline: none;
-          border-color: #4f8cff;
-          background: rgba(79,140,255,0.06);
-          box-shadow: 0 0 0 3px rgba(79,140,255,0.15);
-        }
-        .field-input:disabled { opacity: 0.5; }
-
-        .submit-btn {
-          width: 100%;
-          background: linear-gradient(135deg, #34d399, #22b17f);
-          color: #06251a;
-          font-weight: 600;
-          font-size: 0.92rem;
-          padding: 0.75rem;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          transition: filter 150ms ease, transform 150ms ease;
-        }
-        .submit-btn:hover:not(:disabled) { filter: brightness(1.08); }
-        .submit-btn:active:not(:disabled) { transform: scale(0.98); }
-        .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
-        .submit-btn:focus-visible {
-          outline: 2px solid #34d399;
-          outline-offset: 2px;
-        }
-      `}</style>
-
-      {/* Left signature panel */}
-      <div className="login-visual" aria-hidden="true">
-        <div className="brand-mark">
+    <div className={styles.loginShell}>
+      {/* Left signature illustration panel */}
+      <div className={styles.loginVisual} aria-hidden="true">
+        <div className={styles.brandMark}>
           Dashel<span>POS</span>
         </div>
-        <div className="brand-sub">System Administration</div>
+        <div className={styles.brandSub}>System Administration</div>
 
-        <div className="receipt">
-          <div className="receipt-head">
-            <div className="txn">TXN #DP-{new Date().getFullYear()}-0417</div>
-            <div className="title">SYSTEM CHECK</div>
-          </div>
+        <div className={styles.heroWrap}>
+          <svg viewBox="0 0 440 500" width="100%" role="img">
+            <defs>
+              <linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#e0ad72" />
+                <stop offset="100%" stopColor="#a9713c" />
+              </linearGradient>
+            </defs>
 
-          {RECEIPT_LINES.map(({ icon: Icon, label }) => (
-            <div className="receipt-row" key={label}>
-              <span className="icon-box">
-                <Icon size={14} strokeWidth={2} />
-              </span>
-              <span>{label}</span>
-              <span className="status">
-                <Check size={10} strokeWidth={3} />
-              </span>
-            </div>
-          ))}
+            {/* ground shadow */}
+            <ellipse cx="220" cy="463" rx="122" ry="12" fill="rgba(0,0,0,0.4)" />
 
-          <div className="receipt-foot">
-            <span>ALL SYSTEMS</span>
-            <span>ONLINE</span>
-          </div>
+            {/* stand */}
+            <rect x="200" y="398" width="40" height="55" rx="6" fill="#3a2f20" />
+
+            {/* terminal body */}
+            <rect
+              x="95" y="130" width="250" height="270" rx="28"
+              fill="#241d16" stroke="#c48a4e" strokeOpacity="0.45" strokeWidth="2"
+            />
+
+            {/* speaker slot */}
+            <rect x="195" y="144" width="50" height="6" rx="3" fill="#3a2f20" />
+
+            {/* screen */}
+            <rect
+              x="120" y="170" width="200" height="140" rx="16"
+              fill="#2e2417" stroke="rgba(196,138,78,0.25)"
+            />
+
+            {/* checkmark, draws in on load */}
+            <path
+              className={styles.checkPath}
+              d="M155 235 L185 265 L245 205"
+              fill="none" stroke="#7fae8e" strokeWidth="9"
+              strokeLinecap="round" strokeLinejoin="round"
+              pathLength="100"
+            />
+            <text
+              className={styles.approvedText}
+              x="220" y="293" textAnchor="middle"
+              fontFamily="'IBM Plex Mono', monospace" fontSize="13"
+              fill="#a89e8c" letterSpacing="3"
+            >
+              APPROVED
+            </text>
+
+            {/* keypad dots */}
+            <circle cx="180" cy="345" r="6" fill="rgba(196,138,78,0.35)" />
+            <circle cx="220" cy="345" r="6" fill="rgba(196,138,78,0.35)" />
+            <circle cx="260" cy="345" r="6" fill="rgba(196,138,78,0.35)" />
+
+            {/* printer slot */}
+            <rect x="110" y="126" width="90" height="10" rx="3" fill="#150f0a" />
+
+            {/* receipt curling out, rises in on load */}
+            <g className={styles.receiptGroup}>
+              <g transform="rotate(-5 155 90)">
+                <path
+                  d="M112,126 L112,58 L122,66 L131,52 L140,64 L149,52 L158,64 L167,52 L176,64 L185,52 L194,64 L198,58 L198,126 Z"
+                  fill="#f2ecdd" stroke="#d9cdb2" strokeWidth="1"
+                />
+                <line x1="122" y1="80" x2="188" y2="80" stroke="#857a63" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 5" />
+                <line x1="122" y1="93" x2="188" y2="93" stroke="#857a63" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 5" />
+                <line x1="122" y1="106" x2="178" y2="106" stroke="#857a63" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 5" />
+              </g>
+            </g>
+
+            {/* tapping card + NFC waves */}
+            <g transform="translate(300,92) rotate(14)">
+              <rect x="-40" y="-25" width="80" height="52" rx="8" fill="url(#cardGrad)" />
+              <rect x="-32" y="-14" width="18" height="13" rx="3" fill="rgba(255,255,255,0.55)" />
+              <rect x="-32" y="10" width="60" height="6" rx="3" fill="rgba(255,255,255,0.35)" />
+            </g>
+            <g transform="rotate(-45 266 146)">
+              <circle className={styles.arcOuter} cx="266" cy="146" r="34" fill="none" stroke="#c48a4e" strokeWidth="3" pathLength="100" strokeDasharray="28 72" strokeLinecap="round" />
+              <circle className={styles.arcMid} cx="266" cy="146" r="24" fill="none" stroke="#c48a4e" strokeWidth="3" pathLength="100" strokeDasharray="28 72" strokeLinecap="round" />
+              <circle className={styles.arcInner} cx="266" cy="146" r="14" fill="none" stroke="#c48a4e" strokeWidth="3" pathLength="100" strokeDasharray="28 72" strokeLinecap="round" />
+            </g>
+
+            {/* coins */}
+            <g transform="translate(150,453)">
+              <circle r="12" fill="#c48a4e" />
+              <circle r="8" fill="none" stroke="#8a5f30" strokeWidth="1.5" />
+            </g>
+            <g transform="translate(170,461)">
+              <circle r="9" fill="#a9713c" />
+              <circle r="6" fill="none" stroke="#6f5327" strokeWidth="1.2" />
+            </g>
+          </svg>
         </div>
 
-        <p className="visual-caption">
+        <p className={styles.visualCaption}>
           <strong>One dashboard</strong> for every till — sales, stock, orders
           and reports, synced in real time.
         </p>
       </div>
 
       {/* Right login form panel */}
-      <div className="login-form-panel">
-        <div className="login-form-card">
-          <div className="form-heading">Welcome back</div>
-          <p className="form-sub">Sign in to the Dashel POS admin console.</p>
+      <div className={styles.loginFormPanel}>
+        <div className={styles.loginFormCard}>
+          <div className={styles.formHeading}>Welcome back</div>
+          <p className={styles.formSub}>Sign in to the Dashel POS admin console.</p>
 
           {error && (
-            <div
-              role="alert"
-              style={{
-                background: "rgba(239,68,68,0.1)",
-                border: "1px solid rgba(239,68,68,0.35)",
-                color: "#fca5a5",
-              }}
-              className="px-4 py-3 rounded-lg mb-4 text-sm"
-            >
+            <div role="alert" className={`${styles.errorBox} px-4 py-3 rounded-lg mb-4 text-sm`}>
               {error}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label htmlFor="email" className="field-label">
+              <label htmlFor="email" className={styles.fieldLabel}>
                 Email
               </label>
               <input
@@ -352,7 +175,7 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
-                className="field-input"
+                className={styles.fieldInput}
                 placeholder="you@example.com"
                 required
               />
@@ -360,10 +183,10 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between mb-1">
-                <label htmlFor="password" className="field-label" style={{ marginBottom: 0 }}>
+                <label htmlFor="password" className={styles.fieldLabel} style={{ marginBottom: 0 }}>
                   Password
                 </label>
-                <a href="/forgot-password" className="text-xs" style={{ color: "#4f8cff" }}>
+                <a href="/forgot-password" className={`${styles.forgotLink} text-xs`}>
                   Forgot password?
                 </a>
               </div>
@@ -375,7 +198,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
-                  className="field-input"
+                  className={styles.fieldInput}
                   style={{ paddingRight: "2.75rem" }}
                   placeholder="••••••••"
                   required
@@ -384,27 +207,15 @@ export default function Login() {
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  style={{ color: "#7d879c", display: "flex", minWidth: 24, minHeight: 24, alignItems: "center", justifyContent: "center" }}
+                  className={`${styles.eyeToggle} absolute right-3 top-1/2 -translate-y-1/2`}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            <button type="submit" disabled={loading} className="submit-btn">
-              {loading && (
-                <span
-                  style={{
-                    height: 14,
-                    width: 14,
-                    border: "2px solid rgba(6,37,26,0.35)",
-                    borderTopColor: "#06251a",
-                    borderRadius: "50%",
-                  }}
-                  className="animate-spin"
-                />
-              )}
+            <button type="submit" disabled={loading} className={styles.submitBtn}>
+              {loading && <span className={`${styles.spinner} animate-spin`} />}
               {loading ? "Signing in…" : "Sign in"}
             </button>
           </form>
